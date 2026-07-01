@@ -101,14 +101,16 @@ body{
   height:100dvh;
   min-height:0;
   margin:0;
-  display:grid;
-  grid-template-rows:auto auto minmax(0,1fr);
+  display:flex;
+  flex-direction:column;
   background:var(--bg);
   color:var(--ink);
   overflow:hidden;
   overflow-x:hidden;
   max-width:100%;
 }
+.topbar,.setup{flex:0 0 auto}
+.workspace{flex:1 1 auto}
 button,input{font:inherit}
 button{
   height:40px;
@@ -279,6 +281,31 @@ input:focus{border-color:var(--accent)}
 }
 .menu-mobile-only{display:none}
 
+/* Drawer segmented controls: equal-width segments that fill the row */
+.menu-body .segmented{
+  display:flex;
+  width:100%;
+  flex-wrap:nowrap;
+}
+.menu-body .segmented button{
+  flex:1 1 0;
+  height:38px;
+  padding:0 8px;
+  text-align:center;
+  justify-content:center;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+}
+.menu-body .font-tools{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-wrap:nowrap;
+}
+.menu-body .font-tools .segmented{flex:1 1 auto}
+.menu-body .font-readout{flex:0 0 auto;min-width:48px;font-size:13px}
+
 /* ==================== Setup Panel ==================== */
 .setup{
   min-width:0;
@@ -300,6 +327,8 @@ input:focus{border-color:var(--accent)}
   height:100%;
   display:grid;
   grid-template-columns:minmax(300px,var(--preview-col)) 10px minmax(420px,1fr);
+  grid-template-rows:minmax(0,1fr);
+  align-items:stretch;
   gap:var(--gap);
   padding:var(--workspace-pad);
   overflow:hidden;
@@ -527,8 +556,8 @@ body.resizing{cursor:col-resize;user-select:none}
   .controls button{width:100%;padding:0 10px}
 }
 
-/* ==================== Breakpoint: Slide list auto-hide ==================== */
-@media (max-width:1360px){
+/* ==================== Breakpoint: Slide list auto-hide (JS controls via data-list; this is the fallback) ==================== */
+@media (max-width:1080px){
   .side-layout{grid-template-columns:minmax(0,1fr)}
   .slide-list{display:none !important}
   .notes-head{border-radius:var(--radius) var(--radius) 0 0}

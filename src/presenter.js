@@ -1,7 +1,7 @@
 const STORAGE_PREFIX='htmlPresenter.v5.';
 const DEFAULTS={slides:'slides.html',notes:'notes.md',fontSize:28,layout:'notes',lang:'zh',theme:'sun'};
 const STACK_BREAKPOINT=900;
-const LIST_BREAKPOINT=1360;
+const LIST_BREAKPOINT=1080;
 const NARROW_BREAKPOINT=900;
 
 const copy={
@@ -31,7 +31,7 @@ function canShowSlideList(){
   const right=document.querySelector('.right');
   const rightWidth=right?.clientWidth || window.innerWidth;
   // 右栏至少要同时容纳：讲稿可读宽度 + list 宽度 + 边框/滚动条余量。
-  return rightWidth>=760;
+  return rightWidth>=640;
 }
 const storageKey=(key)=>`${STORAGE_PREFIX}${key}`;
 
