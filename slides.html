@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Slides</title>
+  <style>
+    :root{
+      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","PingFang SC","Noto Sans SC",sans-serif;
+      color:#202226;
+      background:#0f1115;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;overflow:hidden;background:#0f1115}
+    .deck{height:100%;position:relative}
+    .slide{
+      position:absolute;
+      inset:0;
+      display:none;
+      grid-template-rows:auto 1fr auto;
+      gap:42px;
+      padding:78px 92px;
+      background:#f7f8fa;
+      overflow:hidden;
+    }
+    .slide.active{display:grid}
+    .slide.dark{background:#17191f;color:#f5f1e9}
+    .slide.split{grid-template-columns:1.05fr .95fr;grid-template-rows:auto 1fr auto}
+    .slide.split .visual{grid-column:2;grid-row:1 / span 3}
+    .slide.split .foot{grid-column:1}
+    .eyebrow{color:#b8324f;font-size:25px;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
+    .dark .eyebrow{color:#f2b35d}
+    h1{font-size:86px;line-height:1.02;margin:22px 0 0;max-width:1040px;letter-spacing:0;font-weight:900}
+    h2{font-size:64px;line-height:1.08;margin:0;font-weight:900}
+    p{font-size:34px;line-height:1.46;color:#565c66;max-width:1040px;margin:0}
+    .dark p{color:#c9cbd0}
+    .lead{align-self:center;display:grid;gap:34px}
+    .quiet{color:#7a808a}
+    .foot{display:flex;justify-content:space-between;align-items:center;color:#8b929d;font-size:24px}
+    .mark{width:92px;height:10px;border-radius:999px;background:#b8324f}
+    .dark .mark{background:#f2b35d}
+    .stack{display:grid;gap:18px;align-self:center}
+    .point{
+      display:grid;
+      grid-template-columns:68px 1fr;
+      gap:22px;
+      align-items:center;
+      padding:26px 30px;
+      border:1px solid #d9dde4;
+      background:#fff;
+      border-radius:18px;
+      box-shadow:0 14px 36px rgba(28,32,40,.08);
+    }
+    .num{
+      width:68px;
+      height:68px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      background:#202226;
+      font-size:28px;
+      font-weight:900;
+    }
+    .point strong{display:block;font-size:36px;line-height:1.15;margin-bottom:6px}
+    .point span{font-size:25px;color:#67707c;line-height:1.35}
+    .visual{
+      align-self:stretch;
+      display:grid;
+      align-content:center;
+      gap:20px;
+      padding:48px;
+      border-left:1px solid #d9dde4;
+    }
+    .window{
+      background:#17191f;
+      border-radius:24px;
+      padding:28px;
+      box-shadow:0 30px 70px rgba(21,24,32,.22);
+      color:#f7f8fa;
+    }
+    .dots{display:flex;gap:10px;margin-bottom:34px}
+    .dots span{width:14px;height:14px;border-radius:50%;background:#69707b}
+    .dots span:first-child{background:#d45b6c}
+    .line{height:18px;border-radius:999px;background:#3a404b;margin:14px 0}
+    .line.short{width:58%}
+    .line.mid{width:74%}
+    .big-number{font-size:144px;line-height:.9;font-weight:950;color:#b8324f}
+    .dark .big-number{color:#f2b35d}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+      align-self:center;
+    }
+    .tile{
+      min-height:230px;
+      padding:30px;
+      background:#fff;
+      border:1px solid #d9dde4;
+      border-radius:18px;
+      display:grid;
+      align-content:space-between;
+    }
+    .tile b{font-size:34px;line-height:1.15}
+    .tile span{font-size:24px;color:#68717d;line-height:1.35}
+    .diagram{
+      align-self:center;
+      display:grid;
+      grid-template-columns:1fr 76px 1fr;
+      gap:26px;
+      align-items:center;
+    }
+    .screen{
+      min-height:390px;
+      border-radius:26px;
+      padding:36px;
+      background:#fff;
+      border:1px solid #d9dde4;
+      box-shadow:0 22px 54px rgba(28,32,40,.1);
+      display:grid;
+      align-content:center;
+      gap:20px;
+    }
+    .screen.audience{background:#202226;color:#fff}
+    .arrow{font-size:54px;text-align:center;color:#b8324f;font-weight:900}
+    .screen small{font-size:24px;color:#8a929d;text-transform:uppercase;font-weight:800;letter-spacing:.08em}
+    .screen h3{font-size:46px;margin:0;line-height:1.05}
+    .screen p{font-size:27px;color:#68717d}
+    .audience p{color:#c6c9cf}
+    code{font-family:"SF Mono",Menlo,monospace;font-size:.78em;color:#b8324f}
+  </style>
+</head>
+<body>
+  <main class="deck">
+    <section class="slide split" data-title="The projection trap">
+      <div>
+        <div class="eyebrow">Problem</div>
+        <h1>投屏以后，最需要看的东西消失了</h1>
+      </div>
+      <div class="lead">
+        <p>观众只需要看到简单页面；演讲者却需要记住上下文、节奏、例子和转场。</p>
+        <p class="quiet">HTML PPT 越精简，这个问题越明显。</p>
+      </div>
+      <div class="foot"><span>01 / 06</span><span class="mark"></span></div>
+      <div class="visual">
+        <div class="window">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="line mid"></div>
+          <div class="line"></div>
+          <div class="line short"></div>
+          <div class="line mid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" data-title="Light slides, heavy talk track">
+      <div>
+        <div class="eyebrow">Reality</div>
+        <h1>页面越简单，讲述负担越重</h1>
+      </div>
+      <div class="grid">
+        <div class="tile"><b>视觉页</b><span>只放结论、关键词、结构。</span></div>
+        <div class="tile"><b>演讲稿</b><span>包含铺垫、例子、提醒和转场。</span></div>
+        <div class="tile"><b>演讲者</b><span>需要在不打断节奏的情况下看见它。</span></div>
+      </div>
+      <div class="foot"><span>02 / 06</span><span class="mark"></span></div>
+    </section>
+
+    <section class="slide dark" data-title="What goes wrong without notes">
+      <div>
+        <div class="eyebrow">Cost</div>
+        <h1>没有备注视图，临场会付出三个代价</h1>
+      </div>
+      <div class="stack">
+        <div class="point"><div class="num">1</div><div><strong>忘掉转场</strong><span>每一页都知道要讲什么，但不知道如何自然接到下一页。</span></div></div>
+        <div class="point"><div class="num">2</div><div><strong>节奏失控</strong><span>讲得兴奋时超时，讲得紧张时跳过关键解释。</span></div></div>
+        <div class="point"><div class="num">3</div><div><strong>操作分心</strong><span>一边翻页，一边切窗口，一边找讲稿，注意力被拆碎。</span></div></div>
+      </div>
+      <div class="foot"><span>03 / 06</span><span class="mark"></span></div>
+    </section>
+
+    <section class="slide" data-title="Presenter Mode split">
+      <div>
+        <div class="eyebrow">Solution</div>
+        <h1>把观众视图和演讲者视图拆开</h1>
+      </div>
+      <div class="diagram">
+        <div class="screen audience">
+          <small>Audience</small>
+          <h3>干净的 PPT 页面</h3>
+          <p>只展示观众需要看到的内容。</p>
+        </div>
+        <div class="arrow">→</div>
+        <div class="screen">
+          <small>Presenter</small>
+          <h3>讲稿、计时、预览</h3>
+          <p>演讲者掌握完整上下文。</p>
+        </div>
+      </div>
+      <div class="foot"><span>04 / 06</span><span class="mark"></span></div>
+    </section>
+
+    <section class="slide split" data-title="Simple contract">
+      <div>
+        <div class="eyebrow">Contract</div>
+        <h1>接入规范应该足够小</h1>
+      </div>
+      <div class="lead">
+        <p>默认读取 <code>slides.html</code> 和 <code>notes.md</code>。复杂项目也可以通过 URL 参数传路径。</p>
+        <p class="quiet">PPT 页用 <code>.slide</code> 标记，讲稿用 <code>## 01</code> 对齐页码。</p>
+      </div>
+      <div class="foot"><span>05 / 06</span><span class="mark"></span></div>
+      <div class="visual">
+        <div class="window">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="line" style="width:86%"></div>
+          <div class="line short"></div>
+          <div class="line" style="width:68%"></div>
+          <div class="line mid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide dark" data-title="Open source direction">
+      <div>
+        <div class="eyebrow">Goal</div>
+        <h1>它不是 PPT 编辑器，而是演讲时的控制台</h1>
+      </div>
+      <div class="lead">
+        <p>少做编辑，多做临场支持：看稿、看下一页、看时间、控制展示窗口。</p>
+        <div class="big-number">3 min</div>
+        <p class="quiet">目标：新用户 3 分钟内完成第一次接入。</p>
+      </div>
+      <div class="foot"><span>06 / 06</span><span class="mark"></span></div>
+    </section>
+  </main>
+  <script>
+    const slides=[...document.querySelectorAll('.slide')];
+    let current=0;
+    function show(index){
+      current=Math.max(0,Math.min(index,slides.length-1));
+      slides.forEach((slide,i)=>slide.classList.toggle('active',i===current));
+      history.replaceState(null,'',`#${current+1}`);
+    }
+    window.deck={show,count:slides.length};
+    window.addEventListener('hashchange',()=>{
+      const next=parseInt(location.hash.replace('#',''),10);
+      if(Number.isFinite(next))show(next-1);
+    });
+    show(parseInt(location.hash.replace('#',''),10)-1 || 0);
+  </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "presenter-mode",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Zero-build presenter view for HTML slide decks.",
+  "type": "module",
+  "scripts": {
+    "test": "node scripts/smoke-test.mjs"
+  },
+  "keywords": [
+    "presentation",
+    "speaker-notes",
+    "html-slides",
+    "presenter-mode"
+  ],
+  "license": "MIT"
+}

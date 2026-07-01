@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presenter Mode</title>
+  <link rel="stylesheet" href="src/presenter.css">
+  <script src="src/presenter.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <h1>Presenter Mode</h1>
+      <span><span class="status-dot" id="statusDot"></span><span id="statusText" data-i18n="statusDisconnected">Audience window disconnected</span></span>
+    </div>
+    <div class="top-actions">
+      <div class="view-controls">
+        <div class="segmented" aria-label="Font size">
+          <button id="fontDown" title="Decrease notes font">A−</button>
+          <button id="fontReset" data-i18n="default">Default</button>
+          <button id="fontUp" title="Increase notes font">A+</button>
+        </div>
+        <span class="font-readout" id="fontReadout">28px</span>
+        <div class="segmented" aria-label="Layout">
+          <button id="layoutNotes" data-layout-button="notes" data-i18n="layoutNotes">Notes</button>
+          <button id="layoutBalanced" data-layout-button="balanced" data-i18n="layoutBalanced">Balanced</button>
+          <button id="layoutPreview" data-layout-button="preview" data-i18n="layoutPreview">Preview</button>
+        </div>
+        <div class="segmented" aria-label="Panels">
+          <button data-panel-toggle="setup" data-i18n="panelSetup">Setup</button>
+          <button data-panel-toggle="current" data-i18n="panelCurrent">Current</button>
+          <button data-panel-toggle="next" data-i18n="panelNext">Next</button>
+          <button data-panel-toggle="timer" data-i18n="panelTimer">Timer</button>
+          <button data-panel-toggle="list" data-i18n="panelList">List</button>
+        </div>
+        <div class="segmented" aria-label="Language">
+          <button id="langEn" data-lang-button="en">EN</button>
+          <button id="langZh" data-lang-button="zh">中文</button>
+        </div>
+        <div class="segmented" aria-label="Theme">
+          <button id="themeSun" data-theme-button="sun" title="Light theme">☀</button>
+          <button id="themeMoon" data-theme-button="moon" title="Dark theme">☾</button>
+        </div>
+      </div>
+      <button id="openAudience" class="primary" data-i18n="openAudience">Open audience</button>
+    </div>
+  </header>
+
+  <section class="setup panel" id="setupPanel">
+    <div class="field">
+      <label for="deckUrl" data-i18n="slidesPath">Slides HTML path</label>
+      <input id="deckUrl" value="slides.html" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="notesUrl" data-i18n="notesPath">Notes Markdown path</label>
+      <input id="notesUrl" value="notes.md" autocomplete="off">
+    </div>
+    <button id="loadFiles" class="primary" data-i18n="load">Load</button>
+  </section>
+
+  <main class="workspace">
+    <section class="left">
+      <div class="panel stage-preview" id="currentPanel">
+        <div class="panel-title"><span data-i18n="currentPreview">Current slide</span><span id="currentLabel">01 / 01</span></div>
+        <div class="preview-frame"><iframe id="currentPreview" title="Current slide preview"></iframe></div>
+      </div>
+      <div class="next-row" id="nextRow">
+        <div class="panel mini-preview" id="nextPanel">
+          <div class="panel-title"><span data-i18n="nextPreview">Next slide</span><span id="nextLabel">END</span></div>
+          <div class="preview-frame"><iframe id="nextPreview" title="Next slide preview"></iframe></div>
+        </div>
+        <div class="panel timer-card" id="timerPanel">
+          <div>
+            <div class="panel-title" data-i18n="timer">Timer</div>
+            <div class="timer" id="timer">00:00</div>
+          </div>
+          <div class="meta-grid">
+            <div class="metric"><small data-i18n="currentPage">Current</small><strong id="pageMetric">1</strong></div>
+            <div class="metric"><small data-i18n="totalPages">Total</small><strong id="totalMetric">1</strong></div>
+          </div>
+          <div class="controls">
+            <button class="icon" id="prevSlide" title="Previous slide">←</button>
+            <button class="icon" id="nextSlide" title="Next slide">→</button>
+            <button id="resetTimer" data-i18n="resetTimer">Reset timer</button>
+            <button id="blackout" class="danger" data-i18n="blackout">Blackout</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="splitter" id="mainSplitter" title="Drag to resize preview column"></div>
+
+    <section class="right panel side-layout">
+      <div class="notes">
+        <div class="notes-head">
+          <div>
+            <div class="slide-kicker" id="slideKicker">Slide 01</div>
+            <div class="slide-title" id="slideTitle">Loading</div>
+          </div>
+          <div class="progress" aria-label="Progress"><span id="progressBar"></span></div>
+        </div>
+        <article class="notes-body" id="notesBody"></article>
+      </div>
+      <aside class="slide-list" id="slideList" aria-label="Slide list"></aside>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+</body>
+</html>
