@@ -337,6 +337,14 @@ function applyPanels(options={}){
     if(toggle)toggle.classList.toggle('off',!isOpen);
   });
   el('nextRow').dataset.collapsed=String(!state.panels.next&&!state.panels.timer);
+
+  // Mark left column as empty when all previews/timer are hidden
+  const leftSection=document.querySelector('.left');
+  if(leftSection){
+    const allLeftHidden=!state.panels.current&&!state.panels.next&&!state.panels.timer;
+    leftSection.dataset.empty=String(allLeftHidden);
+  }
+
   if(!options.silent)localStorage.setItem(storageKey('panels'),JSON.stringify(state.panels));
   requestAnimationFrame(scalePreviews);
 }
