@@ -426,13 +426,14 @@ body.resizing{cursor:col-resize;user-select:none}
   .view-controls{width:100%;justify-content:flex-start}
   .workspace{grid-template-columns:1fr;gap:14px}
   .splitter{display:none}
-  .stage-preview{height:300px;max-height:none}
+  .stage-preview{height:auto;min-height:200px;max-height:300px}
   .slide-list{display:none}
   .setup{grid-template-columns:1fr;gap:8px}
   .next-row{grid-template-columns:1fr;gap:14px}
   .side-layout{grid-template-columns:1fr}
 }
 @media (max-width:900px){
+  /* 移动端：讲稿优先，当前页预览适中 */
   .topbar{padding:10px 12px}
   .brand h1{font-size:16px}
   .brand span{font-size:12px}
@@ -441,34 +442,86 @@ body.resizing{cursor:col-resize;user-select:none}
   .segmented button{font-size:13px;padding:0 8px;min-width:auto}
   .font-readout{min-width:38px;font-size:11px}
   .top-actions button{font-size:14px;height:36px;padding:0 12px}
-  .notes-head{grid-template-columns:1fr;gap:10px}
-  .progress{min-width:0;margin-top:8px}
-  .slide-title{font-size:24px}
-  .notes-body{font-size:18px;padding:18px 20px}
+
+  /* 设置面板在移动端默认隐藏 */
+  .setup[data-collapsed="false"]{
+    margin:10px 10px 0;
+  }
+
+  /* 左侧预览：当前页更大 */
+  .left{
+    order:1;
+  }
+  .right{
+    order:2;
+    flex:1;
+  }
+  .stage-preview{
+    height:auto;
+    min-height:240px;
+    max-height:320px;
+    padding:12px;
+  }
+  .preview-frame{
+    min-height:200px;
+  }
+
+  /* 讲稿区域优化 */
+  .notes-head{grid-template-columns:1fr;gap:10px;padding:14px 16px 12px}
+  .progress{min-width:0;margin-top:8px;height:6px}
+  .slide-kicker{font-size:12px}
+  .slide-title{font-size:22px}
+  .notes-body{font-size:18px;padding:18px 16px 28px;line-height:1.65}
 }
 @media (max-width:600px){
-  .topbar{padding:8px 10px;gap:12px}
+  /* 手机端：当前页预览 + 讲稿 */
+  .topbar{padding:8px 10px;gap:10px}
   .brand{gap:8px;margin-bottom:6px}
   .brand h1{font-size:15px}
   .view-controls{gap:4px}
   .segmented{padding:2px;gap:1px}
   .segmented button{height:30px;font-size:12px;padding:0 6px}
   .top-actions button{height:34px;font-size:13px;padding:0 10px}
+
   .setup{padding:10px;gap:6px}
-  .panel{padding:10px}
-  .stage-preview{height:auto;min-height:180px;padding:8px}
-  .panel-title{font-size:11px}
+  .setup[data-collapsed="false"]{
+    margin:8px 8px 0;
+  }
+
+  .workspace{padding:8px;gap:8px}
+
+  /* 当前页预览：手机上更大更清晰 */
+  .stage-preview{
+    padding:10px;
+    min-height:180px;
+    max-height:260px;
+  }
+  .preview-frame{
+    min-height:160px;
+  }
+  .panel-title{font-size:11px;margin-bottom:6px}
+
+  /* 隐藏的面板保持紧凑 */
+  .next-row{gap:8px}
+  .mini-preview{padding:6px}
+  .timer-card{padding:10px;gap:8px}
+  .timer{font-size:32px}
+  .metric{padding:6px}
+  .metric small{font-size:10px;margin-bottom:4px}
+  .metric strong{font-size:15px}
+  .controls{gap:6px}
+  .controls button{height:32px;font-size:13px;padding:0 8px}
+
+  /* 讲稿区域：手机上的主要内容 */
   .notes-head{padding:12px 14px 10px}
   .slide-kicker{font-size:11px}
-  .slide-title{font-size:20px;margin:4px 0 0}
-  .progress{height:6px}
-  .notes-body{font-size:16px;padding:14px 16px 24px}
-  .next-row{gap:10px}
-  .timer-card{padding:12px;gap:10px}
-  .timer{font-size:36px}
-  .metric{padding:8px}
-  .metric small{font-size:11px}
-  .metric strong{font-size:16px}
-  .controls{gap:6px}
-  .controls button{height:34px;font-size:14px}
+  .slide-title{font-size:19px;margin:4px 0 0}
+  .notes-body{
+    font-size:17px;
+    padding:16px 14px 28px;
+    line-height:1.7;
+  }
+  .notes-body p{margin:0 0 14px}
+  .notes-body ul,.notes-body ol{margin:0 0 14px 1em}
+  .notes-body li{margin:0 0 8px}
 }

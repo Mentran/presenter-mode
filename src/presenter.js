@@ -543,9 +543,21 @@ function restoreSettings(){
   el('notesUrl').value=paths.notes;
   if(Number.isFinite(current))state.current=current;
   applyFontSize(Number.isFinite(fontSize)?fontSize:DEFAULTS.fontSize,{silent:true});
+
+  // 先恢复保存的面板状态
   if(panels){
     try{state.panels={...state.panels,...JSON.parse(panels)}}catch(_){}
   }
+
+  // 移动端优化：只显示当前页预览，隐藏其他
+  if(window.innerWidth<=900){
+    state.panels.setup=false;
+    state.panels.current=true;  // 保留当前页预览
+    state.panels.next=false;    // 隐藏下一页
+    state.panels.timer=false;   // 隐藏计时器
+    state.panels.list=false;    // 隐藏列表
+  }
+
   applyPanels({silent:true});
   setTheme(theme,{silent:true});
   if(Number.isFinite(previewWidth)&&previewWidth>0)setPreviewWidth(previewWidth,{silent:true});
