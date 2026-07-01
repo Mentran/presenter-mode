@@ -11,7 +11,18 @@
     "presentation",
     "speaker-notes",
     "html-slides",
-    "presenter-mode"
+    "presenter-mode",
+    "presenter-view",
+    "slides"
   ],
-  "license": "MIT"
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/presenter-mode.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/presenter-mode/issues"
+  },
+  "homepage": "https://github.com/yourusername/presenter-mode#readme"
 }
