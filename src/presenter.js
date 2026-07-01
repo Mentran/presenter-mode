@@ -14,7 +14,7 @@ const copy={
 };
 
 const state={
-  deckUrl:'',notesUrl:'',current:0,total:1,notes:[],titles:[],audience:null,startedAt:Date.now(),black:false,
+  deckUrl:'',notesUrl:'',deckFile:null,notesFile:null,deckBlobUrl:null,current:0,total:1,notes:[],titles:[],audience:null,startedAt:Date.now(),black:false,
   previewReady:{current:false,next:false},fontSize:DEFAULTS.fontSize,layout:DEFAULTS.layout,lang:DEFAULTS.lang,theme:DEFAULTS.theme,previewWidth:380,
   panels:{setup:false,current:true,next:true,timer:true,list:true}
 };
@@ -67,6 +67,15 @@ async function loadText(url){
   const res=await fetch(url,{cache:'no-store'});
   if(!res.ok)throw new Error(`${res.status} ${res.statusText}`);
   return res.text();
+}
+
+function readFileAsText(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(reader.error);
+    reader.readAsText(file);
+  });
 }
 
 function parseNotes(markdown){
@@ -139,22 +148,40 @@ async function loadFiles(){
   const notesInput=el('notesUrl');
   const notesBody=el('notesBody');
   try{
+    // If file objects are stored, read them directly instead of fetching URLs
+    const deckFile=state.deckFile;
+    const notesFile=state.notesFile;
+
     state.deckUrl=normalizeUrl((deckInput?.value || '').trim() || DEFAULTS.slides);
     state.notesUrl=normalizeUrl((notesInput?.value || '').trim() || DEFAULTS.notes);
-    if(deckInput)localStorage.setItem(storageKey('slides'),deckInput.value.trim());
-    if(notesInput)localStorage.setItem(storageKey('notes'),notesInput.value.trim());
+    if(deckInput && !deckFile)localStorage.setItem(storageKey('slides'),deckInput.value.trim());
+    if(notesInput && !notesFile)localStorage.setItem(storageKey('notes'),notesInput.value.trim());
     if(notesBody)notesBody.innerHTML=`<p class="notes-empty">${t('loading')}...</p>`;
 
-    const [deckHtml,notesMd]=await Promise.all([loadText(state.deckUrl),loadText(state.notesUrl)]);
+    const deckHtml=deckFile ? await readFileAsText(deckFile) : await loadText(state.deckUrl);
+    const notesMd=notesFile ? await readFileAsText(notesFile) : await loadText(state.notesUrl);
+
     state.titles=parseDeckTitles(deckHtml);
     state.notes=parseNotes(notesMd);
     state.total=Math.max(state.titles.length,state.notes.length,1);
     state.current=clamp(state.current,0,state.total-1);
 
+    // If loaded from file, create a blob URL for iframe preview
+    if(deckFile){
+      if(state.deckBlobUrl)URL.revokeObjectURL(state.deckBlobUrl);
+      const blob=new Blob([deckHtml],{type:'text/html'});
+      state.deckBlobUrl=URL.createObjectURL(blob);
+      state.deckUrl=state.deckBlobUrl;
+    }
+
     loadPreviews();
     buildSlideList();
     goTo(state.current,{silent:false});
     toast(t('loaded'));
+
+    // Clear file references after loading
+    state.deckFile=null;
+    state.notesFile=null;
   }catch(err){
     if(notesBody){
       notesBody.innerHTML=`<p class="notes-empty">${t('loadFailed')}: ${escapeHtml(err.message)}</p><p class="notes-empty">${t('useHttp')}<code>python3 -m http.server 4311</code></p>`;
@@ -621,6 +648,24 @@ function bindEvents(){
 
   const bind=(id,type,handler)=>el(id)?.addEventListener(type,handler);
   bind('loadFiles','click',loadFiles);
+  bind('deckFile','change',(e)=>{
+    const file=e.target.files[0];
+    if(file){
+      state.deckFile=file;
+      const display=el('deckUrl');
+      if(display)display.value=file.name;
+      loadFiles();
+    }
+  });
+  bind('notesFile','change',(e)=>{
+    const file=e.target.files[0];
+    if(file){
+      state.notesFile=file;
+      const display=el('notesUrl');
+      if(display)display.value=file.name;
+      loadFiles();
+    }
+  });
   bind('openAudience','click',openAudience);
   bind('prevSlide','click',()=>goTo(state.current-1));
   bind('nextSlide','click',()=>goTo(state.current+1));

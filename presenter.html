@@ -107,11 +107,17 @@
   <section class="setup panel" id="setupPanel" data-collapsed="true">
     <div class="field">
       <label for="deckUrl" data-i18n="slidesPath">Slides HTML path</label>
-      <input id="deckUrl" value="slides.html" autocomplete="off">
+      <div class="file-input-wrapper">
+        <input type="file" id="deckFile" accept=".html,.htm" class="file-input">
+        <input id="deckUrl" value="slides.html" autocomplete="off" readonly class="file-display">
+      </div>
     </div>
     <div class="field">
       <label for="notesUrl" data-i18n="notesPath">Notes Markdown path</label>
-      <input id="notesUrl" value="notes.md" autocomplete="off">
+      <div class="file-input-wrapper">
+        <input type="file" id="notesFile" accept=".md,.markdown,.txt" class="file-input">
+        <input id="notesUrl" value="notes.md" autocomplete="off" readonly class="file-display">
+      </div>
     </div>
     <button id="loadFiles" class="primary" data-i18n="load">Load</button>
   </section>
@@ -132,9 +138,11 @@
             <div class="panel-title" data-i18n="timer">Timer</div>
             <div class="timer" id="timer">00:00</div>
           </div>
-          <div class="meta-grid">
-            <div class="metric"><small data-i18n="currentPage">Current</small><strong id="pageMetric">1</strong></div>
-            <div class="metric"><small data-i18n="totalPages">Total</small><strong id="totalMetric">1</strong></div>
+          <div class="page-compact">
+            <span class="page-label" data-i18n="page">Page</span>
+            <span class="page-current" id="pageMetric">1</span>
+            <span class="page-divider">/</span>
+            <span class="page-total" id="totalMetric">1</span>
           </div>
           <div class="controls">
             <button class="icon" id="prevSlide" title="Previous slide">←</button>
