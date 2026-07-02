@@ -6,6 +6,8 @@ coverage/
 
 # Temporary test files
 测试/
+发布总结.txt
+提交改动.sh
 
 # IDE
 .vscode/

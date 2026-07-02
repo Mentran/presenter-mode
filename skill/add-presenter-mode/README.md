@@ -45,10 +45,7 @@ your-project/
   slides.html                    # Your original deck (unchanged by default)
   notes.md                       # Speaker notes (auto-generated if missing)
   presenter-mode/
-    presenter.html               # Presenter view
-    src/
-      presenter.css
-      presenter.js
+    presenter.html               # Presenter view (CSS + JS inlined, single file)
 ```
 
 ## Command reference
