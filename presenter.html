@@ -350,6 +350,10 @@ input:focus{border-color:var(--accent)}
 .setup button{align-self:end}
 .field{min-width:0;position:relative}
 .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:650}
+.file-input-wrapper{position:relative;display:block}
+.file-input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2}
+.file-display{cursor:pointer;pointer-events:none}
+.file-input-wrapper:hover .file-display{background:var(--surface-hover);border-color:var(--accent)}
 
 /* ==================== Workspace ==================== */
 .workspace{
@@ -815,11 +819,17 @@ body.resizing{cursor:col-resize;user-select:none}
   <section class="setup panel" id="setupPanel" data-collapsed="true">
     <div class="field">
       <label for="deckUrl" data-i18n="slidesPath">Slides HTML path</label>
-      <input id="deckUrl" value="slides.html" autocomplete="off" placeholder="index.html">
+      <div class="file-input-wrapper">
+        <input type="file" id="deckFile" accept=".html,.htm" class="file-input">
+        <input id="deckUrl" value="slides.html" autocomplete="off" readonly class="file-display">
+      </div>
     </div>
     <div class="field">
       <label for="notesUrl" data-i18n="notesPath">Notes Markdown path</label>
-      <input id="notesUrl" value="notes.md" autocomplete="off" placeholder="notes.md">
+      <div class="file-input-wrapper">
+        <input type="file" id="notesFile" accept=".md,.markdown,.txt" class="file-input">
+        <input id="notesUrl" value="notes.md" autocomplete="off" readonly class="file-display">
+      </div>
     </div>
     <button id="loadFiles" class="primary" data-i18n="load">Load</button>
   </section>
@@ -898,7 +908,7 @@ const copy={
 };
 
 const state={
-  deckUrl:'',notesUrl:'',current:0,total:1,notes:[],titles:[],audience:null,startedAt:Date.now(),black:false,
+  deckUrl:'',notesUrl:'',deckFile:null,notesFile:null,deckBlobUrl:null,current:0,total:1,notes:[],titles:[],audience:null,startedAt:Date.now(),black:false,
   previewReady:{current:false,next:false},fontSize:DEFAULTS.fontSize,layout:DEFAULTS.layout,lang:DEFAULTS.lang,theme:DEFAULTS.theme,previewWidth:380,
   panels:{setup:false,current:true,next:true,timer:true,list:true}
 };
@@ -932,7 +942,7 @@ function toast(message){
 }
 
 function isAbsoluteOrExplicitRelative(value){
-  return /^[a-z][a-z0-9+.-]*:/i.test(value) || value.startsWith('/');
+  return /^[a-z][a-z0-9+.-]*:/i.test(value) || value.startsWith('/') || value.startsWith('./') || value.startsWith('../');
 }
 
 function presenterTargetBase(){
@@ -942,8 +952,7 @@ function presenterTargetBase(){
 
 function normalizeUrl(value){
   const input=value.trim();
-  // Always use presenter.html's location as base for relative paths
-  const base=presenterTargetBase();
+  const base=isAbsoluteOrExplicitRelative(input)?window.location.href:presenterTargetBase();
   return new URL(input,base).href;
 }
 
@@ -970,6 +979,14 @@ async function loadText(url,label='File'){
   return res.text();
 }
 
+function readFileAsText(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(reader.error);
+    reader.readAsText(file);
+  });
+}
 
 function parseNotes(markdown){
   const blocks=[];
@@ -1042,26 +1059,39 @@ async function loadFiles(){
   const notesBody=el('notesBody');
   try{
     // If file objects are stored, read them directly instead of fetching URLs
+    const deckFile=state.deckFile;
+    const notesFile=state.notesFile;
+
     const deckPath=(deckInput?.value || '').trim() || DEFAULTS.slides;
     const notesPath=(notesInput?.value || '').trim() || DEFAULTS.notes;
-    state.deckUrl=normalizeUrl(deckPath);
-    state.notesUrl=normalizeUrl(notesPath);
-    if(deckInput)localStorage.setItem(storageKey('slides'),deckInput.value.trim());
-    if(notesInput)localStorage.setItem(storageKey('notes'),notesInput.value.trim());
+    if(!deckFile)state.deckUrl=normalizeUrl(deckPath);
+    if(!notesFile)state.notesUrl=normalizeUrl(notesPath);
+    if(deckInput && !deckFile)localStorage.setItem(storageKey('slides'),deckInput.value.trim());
+    if(notesInput && !notesFile)localStorage.setItem(storageKey('notes'),notesInput.value.trim());
     if(notesBody)notesBody.innerHTML=`<p class="notes-empty">${t('loading')}...</p>`;
 
-    const deckHtml=await loadText(state.deckUrl,t('slidesPath'));
-    const notesMd=await loadText(state.notesUrl,t('notesPath'));
+    const deckHtml=deckFile ? await readFileAsText(deckFile) : await loadText(state.deckUrl,t('slidesPath'));
+    const notesMd=notesFile ? await readFileAsText(notesFile) : await loadText(state.notesUrl,t('notesPath'));
 
     state.titles=parseDeckTitles(deckHtml);
     state.notes=parseNotes(notesMd);
     state.total=Math.max(state.titles.length,state.notes.length,1);
     state.current=clamp(state.current,0,state.total-1);
 
+    // If loaded from file, create a blob URL for iframe preview
+    if(deckFile){
+      if(state.deckBlobUrl)URL.revokeObjectURL(state.deckBlobUrl);
+      const blob=new Blob([deckHtml],{type:'text/html'});
+      state.deckBlobUrl=URL.createObjectURL(blob);
+      state.deckUrl=state.deckBlobUrl;
+    }
+
     loadPreviews();
     buildSlideList();
     goTo(state.current,{silent:false});
     toast(t('loaded'));
+
+    // Keep selected File objects so the Reload button does not refetch a display-only filename.
   }catch(err){
     if(notesBody){
       notesBody.innerHTML=`<p class="notes-empty">${t('loadFailed')}: ${escapeHtml(err.message)}</p><p class="notes-empty">${t('useHttp')}<code>python3 -m http.server 4311</code></p>`;
@@ -1330,7 +1360,9 @@ function goTo(index,options={}){
 
 function openAudience(){
   const deckInput=el('deckUrl');
-  state.deckUrl=normalizeUrl((deckInput?.value || '').trim() || DEFAULTS.slides);
+  if(!(state.deckFile && state.deckBlobUrl)){
+    state.deckUrl=normalizeUrl((deckInput?.value || '').trim() || DEFAULTS.slides);
+  }
   state.audience=window.open(`${state.deckUrl}#${state.current+1}`,'html-presenter-audience','popup=yes,width=1280,height=720');
   updateConnection();
   if(!state.audience){toast(t('popupBlocked'));return;}
@@ -1528,6 +1560,24 @@ function bindEvents(){
 
   const bind=(id,type,handler)=>el(id)?.addEventListener(type,handler);
   bind('loadFiles','click',loadFiles);
+  bind('deckFile','change',(e)=>{
+    const file=e.target.files[0];
+    if(file){
+      state.deckFile=file;
+      const display=el('deckUrl');
+      if(display)display.value=file.name;
+      loadFiles();
+    }
+  });
+  bind('notesFile','change',(e)=>{
+    const file=e.target.files[0];
+    if(file){
+      state.notesFile=file;
+      const display=el('notesUrl');
+      if(display)display.value=file.name;
+      loadFiles();
+    }
+  });
   bind('openAudience','click',openAudience);
   bind('prevSlide','click',()=>goTo(state.current-1));
   bind('nextSlide','click',()=>goTo(state.current+1));
