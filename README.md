@@ -84,9 +84,11 @@ Add presenter mode to my slides
 
 skill 会：
 - 自动探测你的幻灯片文件（`slides.html` 或 `index.html`）
-- 自动生成讲稿模板（如果 `notes.md` 不存在）
+- 自动生成讲稿模板（如果 `notes.md` 不存在）——提取幻灯片标题作为章节，你需要填充每页的讲稿内容
 - 把 `presenter.html` 复制到你的项目
 - 启动本地服务器，给你生成好的演讲者 URL
+
+**注意**：自动生成的 `notes.md` 只是个骨架（每页一个 `## 01`、`## 02` 标题），页数可能不完全准确（取决于幻灯片的 HTML 结构）。使用前请检查并填充你的讲稿内容。
 
 详见 [`skill/add-presenter-mode/SKILL.md`](skill/add-presenter-mode/SKILL.md)。
 
@@ -283,9 +285,11 @@ Add presenter mode to my slides
 
 The skill will:
 - Auto-detect your slide deck (`slides.html` or `index.html`)
-- Generate speaker notes template if `notes.md` doesn't exist
+- Generate speaker notes template if `notes.md` doesn't exist — extracts slide titles as section headers; you'll need to fill in the actual notes for each slide
 - Copy `presenter.html` to your project
 - Start a local server and give you the presenter URL
+
+**Note**: The auto-generated `notes.md` is just a skeleton (one `## 01`, `## 02` heading per slide). The page count may not be perfectly accurate depending on your deck's HTML structure. Review and fill in your speaker notes before use.
 
 See [`skill/add-presenter-mode/SKILL.md`](skill/add-presenter-mode/SKILL.md) for details.
 

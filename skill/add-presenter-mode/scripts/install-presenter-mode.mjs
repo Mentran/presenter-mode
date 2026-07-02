@@ -134,7 +134,9 @@ async function createNotesTemplate(slidesRel, notesRel) {
 }
 
 function extractSlideTitles(html) {
-  const slideOpen = /<[^>]*class=["'][^"']*\bslide\b[^"']*["'][^>]*>/gi;
+  // Match class="... slide ..." but NOT class="slide-grid" or "my-slide"
+  // Use (?:^|[\s"']) before and (?:[\s"']|$) after to match complete class token
+  const slideOpen = /<[^>]*class=["'](?:[^"']*\s)?slide(?:\s[^"']*)?["'][^>]*>/gi;
   const matches = [...html.matchAll(slideOpen)];
   if (matches.length === 0) {
     const pageTitle = extractFirst(html, /<title[^>]*>([\s\S]*?)<\/title>/i);
