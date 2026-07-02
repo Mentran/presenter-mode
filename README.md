@@ -33,7 +33,10 @@
 PowerPoint / Keynote 的演讲者模式解决了这个问题——你能看到备注，观众看不到。
 
 **痛点 2：我的幻灯片是 HTML，没有内置演讲者模式**  
-你用 reveal.js、Slidev、或者自己手写的 HTML slides。想要演讲者备注？
+你用 [frontend-slides](https://github.com/zarazhangrui/frontend-slides) 这类 skill、reveal.js、Slidev，或者自己手写 HTML slides 做出了很漂亮的网页 PPT。  
+但它通常只解决"把内容做成幻灯片"，不解决"上台时我怎么看讲稿、预览下一页、控制观众屏"。
+
+想要演讲者备注？
 - 有的框架需要装插件、改配置，还要学新语法
 - 有的框架根本不支持，只能把备注写在浏览器开发者工具的注释里
 - 或者…算了，我硬背吧
@@ -215,7 +218,10 @@ Audiences don't want walls of text. You need to remember what to say on each sli
 PowerPoint / Keynote presenter mode solves this — you see notes, audience doesn't.
 
 **Pain point 2: My slides are HTML, no built-in presenter mode**  
-You're using reveal.js, Slidev, or hand-crafted HTML slides. Want speaker notes?
+You're using a skill like [frontend-slides](https://github.com/zarazhangrui/frontend-slides), reveal.js, Slidev, or hand-crafted HTML slides to make polished web presentations.  
+But those tools usually solve "turn content into slides", not "show my notes, next slide preview, and audience controls while presenting".
+
+Want speaker notes?
 - Some frameworks need plugins, config changes, and learning new syntax
 - Some frameworks don't support it at all — you're stuck putting notes in HTML comments and opening DevTools
 - Or… nevermind, I'll just memorize everything
