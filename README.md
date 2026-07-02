@@ -123,6 +123,31 @@ skill 会：
 presenter.html?slides=你的幻灯片.html&notes=你的讲稿.md&lang=zh
 ```
 
+**重要**：路径必须是**相对于 presenter.html 的相对路径**，不要用绝对磁盘路径（`/Users/...`）。
+
+推荐做法：
+- **把 `presenter.html` 放到幻灯片所在目录**（和 `index.html` 同层），然后用 `slides=index.html`
+- 如果幻灯片在子目录，用 `slides=子目录/index.html`
+
+这样做的原因：
+- 幻灯片里的图片、CSS、JS 等资源用的是相对路径（`assets/foo.png`）
+- 只有 presenter.html 和幻灯片在同一个 HTTP 服务下，这些资源才能正确加载
+- 绝对路径（`/Users/...`）在 HTTP 环境下无法访问
+
+示例目录结构：
+```
+my-presentation/
+  presenter.html    ← 复制到这里
+  index.html        ← 幻灯片
+  assets/           ← 图片等资源
+  notes.md          ← 讲稿
+```
+
+启动服务器后访问：
+```
+http://127.0.0.1:4311/presenter.html?slides=index.html&notes=notes.md
+```
+
 ### URL 参数
 
 | 参数 | 可选值 | 默认值 | 说明 |
@@ -349,6 +374,31 @@ See [`skill/add-presenter-mode/SKILL.md`](skill/add-presenter-mode/SKILL.md) for
 
 ```text
 presenter.html?slides=path/to/slides.html&notes=path/to/notes.md&lang=en
+```
+
+**Important**: Paths must be **relative to presenter.html**, not absolute disk paths (`/Users/...`).
+
+Recommended approach:
+- **Place `presenter.html` in the same directory as your slide deck** (next to `index.html`), then use `slides=index.html`
+- If your deck is in a subdirectory, use `slides=subdirectory/index.html`
+
+Why this matters:
+- Your deck's images, CSS, and JS use relative paths (`assets/foo.png`)
+- These resources only load correctly when presenter.html and the deck are served from the same HTTP server
+- Absolute paths (`/Users/...`) are not accessible in an HTTP context
+
+Example directory structure:
+```
+my-presentation/
+  presenter.html    ← copy here
+  index.html        ← slide deck
+  assets/           ← images and resources
+  notes.md          ← speaker notes
+```
+
+After starting a server, visit:
+```
+http://127.0.0.1:4311/presenter.html?slides=index.html&notes=notes.md
 ```
 
 ### URL Parameters
