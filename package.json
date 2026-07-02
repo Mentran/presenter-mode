@@ -2,7 +2,7 @@
   "name": "presenter-mode",
   "version": "0.1.0",
   "private": false,
-  "description": "Zero-build presenter view for HTML slide decks.",
+  "description": "HTML 幻灯片的零构建演讲者视图 / Zero-build presenter view for HTML slide decks",
   "type": "module",
   "scripts": {
     "test": "node scripts/smoke-test.mjs"
@@ -13,7 +13,10 @@
     "html-slides",
     "presenter-mode",
     "presenter-view",
-    "slides"
+    "slides",
+    "演讲者模式",
+    "演讲者视图",
+    "投屏演讲"
   ],
   "author": "Your Name <your.email@example.com>",
   "license": "MIT",

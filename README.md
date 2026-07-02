@@ -1,49 +1,49 @@
-# Presenter Mode
+# Presenter Mode（演讲者模式）
 
-A zero-build presenter view for HTML slide decks.
+为 HTML 幻灯片提供零构建的演讲者视图。
 
-It gives you a private speaker window with notes, timer, current/next previews, slide list, font controls, collapsible panels, and a separate audience window for projection.
+双屏演示：观众看到干净的幻灯片投影，演讲者在自己的屏幕上看到讲稿、计时器、当前/下一页预览、幻灯片列表和控制面板。
 
-![Presenter View](docs/screenshot-presenter.png)
-![Audience View](docs/screenshot-audience.png)
+![演讲者视图](docs/screenshot-presenter.png)
+![观众视图](docs/screenshot-audience.png)
 
-## Features
+## 核心特性
 
-- 🎯 **Dual-window setup**: Audience sees clean slides, presenter sees notes + previews
-- 📝 **Speaker notes**: Markdown format with slide-by-slide notes
-- ⏱️ **Timer**: Track presentation time with reset
-- 👀 **Preview**: Current and next slide side-by-side
-- 📋 **Slide list**: Quick navigation with thumbnails
-- 🎨 **Responsive**: Adapts to laptop, tablet, and mobile screens
-- 🌓 **Themes**: Light (Sun) and dark (Moon) modes
-- 🌍 **i18n**: English and Chinese UI
-- 🔧 **Zero-build**: No npm install, no bundler, just open in browser
+- 🎯 **双窗口设置**：观众看干净的幻灯片，演讲者看讲稿+预览
+- 📝 **演讲者备注**：Markdown 格式，逐页显示讲稿
+- ⏱️ **计时器**：追踪演讲时间，可重置
+- 👀 **预览**：当前页和下一页并排显示
+- 📋 **幻灯片列表**：缩略图快速导航
+- 🎨 **响应式**：适配笔记本、平板、手机屏幕
+- 🌓 **主题**：浅色（Sun）和深色（Moon）模式
+- 🌍 **中英双语**：界面支持中文和英文
+- 🔧 **零构建**：无需 npm install，无需打包工具，浏览器直接打开
 
-## Quick Start
+## 快速开始
 
-### Option 1: Direct Use
+### 方式 1：直接使用
 
 ```bash
-# Start local server
+# 启动本地服务器
 python3 -m http.server 4311
 
-# Open presenter view
+# 浏览器打开演讲者视图
 open http://127.0.0.1:4311/presenter.html
 ```
 
-By default, Presenter Mode loads:
-- `slides.html` (slide deck)
-- `notes.md` (speaker notes)
+默认加载：
+- `slides.html`（幻灯片）
+- `notes.md`（讲稿）
 
-### Option 2: Custom Paths
+### 方式 2：自定义路径
 
 ```text
-presenter.html?slides=path/to/slides.html&notes=path/to/notes.md
+presenter.html?slides=你的幻灯片.html&notes=你的讲稿.md
 ```
 
-### Option 3: Install into Existing Project
+### 方式 3：安装到现有项目
 
-Use the bundled installation skill (requires Claude Code):
+使用打包的安装脚本（需要 Claude Code）：
 
 ```bash
 node skill/add-presenter-mode/scripts/install-presenter-mode.mjs \
@@ -51,122 +51,146 @@ node skill/add-presenter-mode/scripts/install-presenter-mode.mjs \
   --notes notes.md
 ```
 
-This copies the presenter tool into your project and starts a server.
+脚本会自动复制工具到项目并启动服务器。
 
-## URL Parameters
+## URL 参数
 
-| Parameter | Values | Default | Description |
-|-----------|--------|---------|-------------|
-| `slides` | path | `slides.html` | Path to HTML deck |
-| `notes` | path | `notes.md` | Path to Markdown notes |
-| `lang` | `en`, `zh` | auto | UI language |
-| `theme` | `sun`, `moon` | `sun` | Color theme |
-| `layout` | `default`, `notes`, `balanced`, `preview` | `default` | Initial layout |
+| 参数 | 可选值 | 默认值 | 说明 |
+|------|--------|--------|------|
+| `slides` | 路径 | `slides.html` | 幻灯片 HTML 文件路径 |
+| `notes` | 路径 | `notes.md` | 讲稿 Markdown 文件路径 |
+| `lang` | `zh`, `en` | 自动 | 界面语言 |
+| `theme` | `sun`, `moon` | `sun` | 配色主题 |
+| `layout` | `default`, `notes`, `balanced`, `preview` | `default` | 初始布局 |
 
-**Examples:**
+**示例：**
 
 ```text
-presenter.html?slides=deck/index.html&notes=talk/script.md&lang=zh&theme=moon
+# 中文界面 + 深色主题
+presenter.html?lang=zh&theme=moon
+
+# 自定义文件路径
+presenter.html?slides=deck/index.html&notes=talk/script.md
 ```
 
-## Slide Deck Requirements
+## 幻灯片要求
 
-### Minimum Contract
+### 最低要求
 
-Your HTML deck must have:
-- Each slide in a `.slide` element
-- Speaker notes use `## 01 Title`, `## 02 Title` format in Markdown
+你的 HTML 幻灯片需要满足：
+- 每一页是一个 `.slide` 元素
+- 讲稿使用 `## 01 标题`、`## 02 标题` 格式的 Markdown
 
-### Recommended API
+### 推荐的 API
 
-Expose a navigation API for full control:
+提供导航 API 以获得完整控制：
 
 ```js
 window.deck = {
   show(index) {
-    // Jump to slide at zero-based index
+    // 跳转到指定页（index 从 0 开始）
   },
   next() { this.show(this.current + 1); },
   prev() { this.show(this.current - 1); },
-  get current() { return currentSlideIndex; },
-  get total() { return totalSlides; }
+  get current() { return 当前页索引; },
+  get total() { return 总页数; }
 };
 ```
 
-Presenter Mode calls `window.deck.show(index)` first. If missing, it falls back to hash navigation (`#1`, `#2`, etc.).
+演讲者模式优先调用 `window.deck.show(index)`。如果 API 不存在，会回退到 hash 导航（`#1`、`#2` 等）。
 
-See [skill/add-presenter-mode/SKILL.md](skill/add-presenter-mode/SKILL.md) for deck adaptation patterns.
+详细的幻灯片适配方案见 [skill/add-presenter-mode/SKILL.md](skill/add-presenter-mode/SKILL.md)。
 
-## Notes Format
+## 讲稿格式
 
-Speaker notes use Markdown with numbered headings:
+使用带编号的 Markdown 二级标题：
 
 ```markdown
-## 01 First Slide Title
+## 01 第一页的标题
 
-Speaker notes for slide 1 go here.
+这是第一页的演讲者备注。
 
-Key points:
-- Introduce topic
-- Set expectations
+要点：
+- 介绍主题
+- 设定预期
 
-## 02 The Problem
+## 02 问题所在
 
-Explain pain point...
+解释痛点...
 ```
 
-**Rules:**
-- Headings: `## NN` where NN is slide number (1-based)
-- Everything between `## N` and `## N+1` is notes for slide N
-- Markdown supported: `**bold**`, `*italic*`, `` `code` ``, lists
+**格式规则：**
+- 标题：`## NN 标题`，NN 是幻灯片编号（从 1 开始）
+- `## N` 和 `## N+1` 之间的所有内容是第 N 页的讲稿
+- 支持 Markdown：`**粗体**`、`*斜体*`、`` `代码` ``、列表
 
-## Keyboard Shortcuts
+## 快捷键
 
-| Key | Action |
-|-----|--------|
-| `→`, `Space`, `PageDown` | Next slide |
-| `←`, `PageUp` | Previous slide |
-| `Home`, `End` | First or last slide |
-| `B` | Blackout audience window |
-| `R` | Reset timer |
-| `+`, `-`, `0` | Adjust or reset notes font size |
+| 按键 | 功能 |
+|------|------|
+| `→`、`Space`、`PageDown` | 下一页 |
+| `←`、`PageUp` | 上一页 |
+| `Home`、`End` | 第一页或最后一页 |
+| `B` | 黑屏观众窗口 |
+| `R` | 重置计时器 |
+| `+`、`-`、`0` | 调整或重置讲稿字号 |
 
-## Presentation Workflow
+## 演讲流程
 
-1. **Setup**: Open presenter URL on your laptop
-2. **Launch audience**: Click "Open audience" button
-3. **Position**: Drag audience window to projector screen
-4. **Fullscreen**: Press F11 on audience window
-5. **Present**: Control slides from presenter window; audience follows automatically
+1. **准备**：在笔记本上打开演讲者 URL
+2. **启动观众窗口**：点击"打开观众"按钮
+3. **投屏定位**：把观众窗口拖到投影屏幕
+4. **全屏**：在观众窗口按 F11 进入全屏
+5. **开始演讲**：在演讲者窗口控制翻页，观众窗口自动同步
 
-## Browser Compatibility
+## 浏览器兼容性
 
-Tested on:
+测试通过：
 - Chrome 120+
 - Firefox 120+
 - Safari 17+
 - Edge 120+
 
-Requires modern CSS (Grid, Flexbox, Container Queries) and ES6+ JavaScript.
+需要现代 CSS（Grid、Flexbox、Container Queries）和 ES6+ JavaScript。
 
-## Scope
+## 适用范围
 
-Presenter Mode controls HTML slide decks running in the browser. It does not directly control native desktop presentation apps such as WPS Presentation, Microsoft PowerPoint, or Keynote.
+演讲者模式控制**浏览器中运行的 HTML 幻灯片**。它不直接控制 WPS 演示、Microsoft PowerPoint 或 Keynote 等原生桌面应用。
 
-Native app control would require a separate system automation layer or app-specific plugin, which is outside the zero-build browser-only scope of this project.
+原生应用控制需要系统自动化层或特定插件，超出了本项目的零构建浏览器范畴。
 
-## Development
+## 开发与贡献
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development setup and contribution guidelines.
+详见 [CONTRIBUTING.md](CONTRIBUTING.md)（英文）。
 
-## Test
+核心思路：
+- 直接编辑 `presenter.html`、`src/presenter.css`、`src/presenter.js`
+- 在浏览器中测试（多断点）
+- 运行 `npm test` 验证
+- 同步到 skill 资源：`cp presenter.html src/* skill/add-presenter-mode/assets/presenter-mode/`
+
+## 测试
 
 ```bash
 npm test
 ```
 
-Runs smoke test to verify core functionality. No build step required.
+运行烟雾测试验证核心功能，无需构建步骤。
 
-## License
+## 许可证
 
-MIT — see [LICENSE](LICENSE)
+MIT — 见 [LICENSE](LICENSE)
+
+---
+
+## English
+
+**Presenter Mode** is a zero-build presenter view for HTML slide decks. It provides a dual-window setup: audience sees clean slides, presenter sees notes + previews.
+
+**Quick Start:**
+```bash
+python3 -m http.server 4311
+open http://127.0.0.1:4311/presenter.html
+```
+
+**Documentation:** See [skill/add-presenter-mode/SKILL.md](skill/add-presenter-mode/SKILL.md) for detailed usage, deck adaptation patterns, and installation guide.
