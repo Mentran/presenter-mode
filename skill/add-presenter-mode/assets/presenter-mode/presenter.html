@@ -243,6 +243,32 @@ input:focus{border-color:var(--accent)}
   pointer-events:none;
 }
 .menu-backdrop.open{opacity:1;pointer-events:auto}
+.file-banner{
+  display:flex;align-items:flex-start;gap:12px;
+  padding:12px 20px;
+  background:#fef3c7;color:#78350f;
+  border-bottom:1px solid #fcd34d;
+  font-size:14px;line-height:1.5;
+}
+.file-banner[hidden]{display:none}
+.file-banner-icon{font-size:18px;line-height:1.4;flex:none}
+.file-banner-text{display:flex;flex-direction:column;gap:2px;flex:1 1 auto}
+.file-banner-text strong{font-weight:600}
+.file-banner-text code{
+  align-self:flex-start;margin-top:4px;
+  padding:2px 8px;border-radius:6px;
+  background:rgba(120,53,15,.12);
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;
+}
+.file-banner-close{
+  flex:none;margin-left:8px;
+  width:26px;height:26px;padding:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;line-height:1;color:#78350f;
+  background:transparent;border:none;border-radius:6px;cursor:pointer;
+  transition:background .15s ease;
+}
+.file-banner-close:hover{background:rgba(120,53,15,.14)}
 .menu-drawer{
   position:fixed;
   top:0;right:0;bottom:0;
@@ -717,6 +743,17 @@ body.resizing{cursor:col-resize;user-select:none}
     </div>
   </header>
 
+  <!-- file:// warning banner (shown when opened via file:// instead of an HTTP server) -->
+  <div class="file-banner" id="fileBanner" hidden>
+    <span class="file-banner-icon" aria-hidden="true">⚠️</span>
+    <div class="file-banner-text">
+      <strong id="fileBannerTitle" data-i18n="fileBannerTitle">You opened this file directly</strong>
+      <span id="fileBannerBody" data-i18n="fileBannerBody">Slides and notes cannot load over file://. Start a local server, then reopen this page through http://.</span>
+      <code>python3 -m http.server 4311</code>
+    </div>
+    <button class="file-banner-close" id="fileBannerClose" type="button" aria-label="Dismiss">&times;</button>
+  </div>
+
   <!-- Slide-out menu drawer -->
   <div class="menu-backdrop" id="menuBackdrop" hidden></div>
   <aside class="menu-drawer" id="menuDrawer" aria-label="Settings menu" hidden>
@@ -863,10 +900,10 @@ const NARROW_BREAKPOINT=900;
 
 const copy={
   en:{
-    statusDisconnected:'Disconnected',statusOpening:'Opening',statusConnected:'Connected',settings:'Settings',settingsFiles:'Files',settingsAppearance:'Appearance',settingsWorkspace:'Workspace',settingsLanguage:'Language',settingsTheme:'Theme',settingsFont:'Notes font',settingsLayout:'Layout',settingsPanels:'Panels',themeSun:'Sun',themeMoon:'Moon',default:'Default',layoutNotes:'Notes',layoutBalanced:'Balanced',layoutPreview:'Preview',panelSetup:'Setup',panelCurrent:'Current',panelNext:'Next',panelTimer:'Timer',panelList:'List',openAudience:'Open audience',reload:'Reload',slidesPath:'Slides HTML',notesPath:'Notes Markdown',load:'Reload all',currentPreview:'Current slide',nextPreview:'Next slide',timer:'Timer',currentPage:'Current',totalPages:'Total',resetTimer:'Reset timer',blackout:'Blackout',loading:'Loading',loaded:'Slides and notes loaded',loadFailed:'Load failed',noNotes:'No speaker notes for this slide.',useHttp:'Open this page through a local HTTP server, for example: ',audienceOpened:'Audience window opened. Move it to the projector and enter fullscreen.',fontToast:'Notes font',fontReset:'Notes font reset',show:'Show',hide:'Hide',popupBlocked:'Popup blocked'
+    statusDisconnected:'Disconnected',statusOpening:'Opening',statusConnected:'Connected',settings:'Settings',settingsFiles:'Files',settingsAppearance:'Appearance',settingsWorkspace:'Workspace',settingsLanguage:'Language',settingsTheme:'Theme',settingsFont:'Notes font',settingsLayout:'Layout',settingsPanels:'Panels',themeSun:'Sun',themeMoon:'Moon',default:'Default',layoutNotes:'Notes',layoutBalanced:'Balanced',layoutPreview:'Preview',panelSetup:'Setup',panelCurrent:'Current',panelNext:'Next',panelTimer:'Timer',panelList:'List',openAudience:'Open audience',reload:'Reload',slidesPath:'Slides HTML',notesPath:'Notes Markdown',load:'Reload all',currentPreview:'Current slide',nextPreview:'Next slide',timer:'Timer',currentPage:'Current',totalPages:'Total',resetTimer:'Reset timer',blackout:'Blackout',loading:'Loading',loaded:'Slides and notes loaded',loadFailed:'Load failed',noNotes:'No speaker notes for this slide.',useHttp:'Open this page through a local HTTP server, for example: ',fileBannerTitle:'You opened this file directly',fileBannerBody:'Slides and notes cannot load over file://, and slide navigation will not sync. Start a local server in this folder, then reopen the page through http://.',audienceOpened:'Audience window opened. Move it to the projector and enter fullscreen.',fontToast:'Notes font',fontReset:'Notes font reset',show:'Show',hide:'Hide',popupBlocked:'Popup blocked'
   },
   zh:{
-    statusDisconnected:'未连接',statusOpening:'连接中',statusConnected:'已连接',settings:'设置',settingsFiles:'文件',settingsAppearance:'外观',settingsWorkspace:'工作区',settingsLanguage:'语言',settingsTheme:'主题',settingsFont:'讲稿字号',settingsLayout:'布局',settingsPanels:'区域',themeSun:'Sun',themeMoon:'Moon',default:'默认',layoutNotes:'讲稿',layoutBalanced:'均衡',layoutPreview:'预览',panelSetup:'配置',panelCurrent:'当前',panelNext:'下页',panelTimer:'计时',panelList:'列表',openAudience:'打开展示窗口',reload:'重新加载',slidesPath:'PPT HTML',notesPath:'讲稿 Markdown',load:'重新加载',currentPreview:'当前页预览',nextPreview:'下一页',timer:'计时',currentPage:'当前页',totalPages:'总页数',resetTimer:'重置计时',blackout:'黑屏',loading:'加载中',loaded:'已加载 PPT 和讲稿',loadFailed:'加载失败',noNotes:'这一页没有讲稿。',useHttp:'请用本地 HTTP 服务打开本页面，例如：',audienceOpened:'展示窗口已打开：拖到投影屏后全屏。',fontToast:'讲稿字号',fontReset:'讲稿字号已恢复默认',show:'显示',hide:'隐藏',popupBlocked:'弹窗被浏览器拦截'
+    statusDisconnected:'未连接',statusOpening:'连接中',statusConnected:'已连接',settings:'设置',settingsFiles:'文件',settingsAppearance:'外观',settingsWorkspace:'工作区',settingsLanguage:'语言',settingsTheme:'主题',settingsFont:'讲稿字号',settingsLayout:'布局',settingsPanels:'区域',themeSun:'Sun',themeMoon:'Moon',default:'默认',layoutNotes:'讲稿',layoutBalanced:'均衡',layoutPreview:'预览',panelSetup:'配置',panelCurrent:'当前',panelNext:'下页',panelTimer:'计时',panelList:'列表',openAudience:'打开展示窗口',reload:'重新加载',slidesPath:'PPT HTML',notesPath:'讲稿 Markdown',load:'重新加载',currentPreview:'当前页预览',nextPreview:'下一页',timer:'计时',currentPage:'当前页',totalPages:'总页数',resetTimer:'重置计时',blackout:'黑屏',loading:'加载中',loaded:'已加载 PPT 和讲稿',loadFailed:'加载失败',noNotes:'这一页没有讲稿。',useHttp:'请用本地 HTTP 服务打开本页面，例如：',fileBannerTitle:'你是直接双击打开的文件',fileBannerBody:'在 file:// 下无法加载幻灯片和讲稿，翻页也无法同步。请在本文件夹里启动本地服务器，然后用 http:// 重新打开本页面。',audienceOpened:'展示窗口已打开：拖到投影屏后全屏。',fontToast:'讲稿字号',fontReset:'讲稿字号已恢复默认',show:'显示',hide:'隐藏',popupBlocked:'弹窗被浏览器拦截'
   }
 };
 
@@ -1579,10 +1616,21 @@ function bindEvents(){
   });
 }
 
+function checkProtocol(){
+  // Opened via file:// (double-click) — fetch() of slides/notes is blocked by the browser
+  // and cross-window slide sync will not work. Warn up front so it does not look like a bug.
+  if(location.protocol!=='file:')return;
+  const banner=el('fileBanner');
+  if(banner)banner.hidden=false;
+  const close=el('fileBannerClose');
+  if(close)close.addEventListener('click',()=>{if(banner)banner.hidden=true;});
+}
+
 bindEvents();
 restoreSettings();
 setupSplitter();
 observePreviewFrames();
+checkProtocol();
 loadFiles();
 tick();
 setInterval(tick,250);

@@ -25,6 +25,8 @@ assert(contents['presenter.html'].includes('@container'),'CSS keeps narrow previ
 assert(contents['presenter.html'].includes("DEFAULTS={slides:'slides.html',notes:'notes.md'"),'JS defaults to slides.html and notes.md');
 assert(contents['presenter.html'].includes("params.get('slides')"),'JS supports slides URL parameter');
 assert(contents['presenter.html'].includes('window.open'),'JS opens audience window');
+assert(contents['presenter.html'].includes("location.protocol!=='file:'"),'JS detects file:// protocol');
+assert(contents['presenter.html'].includes('id="fileBanner"'),'presenter.html has file:// warning banner');
 assert(contents['example/slides.html'].includes('class="slide"'),'demo slides expose .slide');
 assert(contents['example/slides.html'].includes('window.deck={show'),'demo slides expose deck.show');
 assert(contents['example/notes.md'].includes('## 01'),'demo notes use numbered headings');
