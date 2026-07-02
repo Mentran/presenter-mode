@@ -5,7 +5,8 @@
   "description": "HTML 幻灯片的零构建演讲者视图 / Zero-build presenter view for HTML slide decks",
   "type": "module",
   "scripts": {
-    "test": "node scripts/smoke-test.mjs"
+    "test": "node scripts/smoke-test.mjs",
+    "sync": "cp presenter.html skill/add-presenter-mode/assets/presenter-mode/presenter.html && echo synced presenter.html to skill assets"
   },
   "keywords": [
     "presentation",

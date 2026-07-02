@@ -262,8 +262,7 @@ If `notes.md` doesn't exist, script extracts slide titles from deck HTML (`data-
 
 ## Maintenance
 
-Sync latest presenter tool before publishing:
+`presenter.html` is a single self-contained file (CSS + JS inlined). Sync the latest copy into skill assets before publishing:
 ```bash
-cp presenter.html skill/add-presenter-mode/assets/presenter-mode/
-cp -r src skill/add-presenter-mode/assets/presenter-mode/
+npm run sync
 ```
