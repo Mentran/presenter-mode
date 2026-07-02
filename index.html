@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presenter Mode — 双屏演讲者视图</title>
+<meta name="description" content="零构建、零配置、零依赖的演讲者模式。讲稿、计时器、下一页预览，观众只看到干净的幻灯片。">
+<style>
+  :root{
+    --bg:#0f1419; --card:#1a2029; --fg:#e6e9ef; --muted:#9aa4b2;
+    --accent:#f5b642; --accent-ink:#1a1200; --border:#2a323d;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:860px; margin:0 auto; padding:48px 24px 64px}
+  header{text-align:center; margin-bottom:40px}
+  h1{font-size:38px; margin:0 0 8px; letter-spacing:-.5px}
+  .tagline{color:var(--muted); font-size:18px; margin:0}
+  .lead{
+    background:var(--card); border:1px solid var(--border); border-radius:14px;
+    padding:22px 26px; margin:28px 0; font-size:16px;
+  }
+  .lead strong{color:var(--accent)}
+  .cta{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin:34px 0}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:13px 26px; border-radius:10px; font-size:16px; font-weight:600;
+    text-decoration:none; transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:var(--accent); color:var(--accent-ink); box-shadow:0 6px 18px rgba(245,182,66,.28)}
+  .btn-ghost{background:transparent; color:var(--fg); border:1px solid var(--border)}
+  .btn-ghost:hover{border-color:var(--accent)}
+  .shots{display:grid; grid-template-columns:1fr; gap:16px; margin:36px 0}
+  .shot{border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--card)}
+  .shot img{width:100%; display:block}
+  .shot figcaption{padding:10px 16px; color:var(--muted); font-size:14px}
+  .features{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin:36px 0}
+  .feat{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px 20px}
+  .feat h3{margin:0 0 6px; font-size:16px}
+  .feat p{margin:0; color:var(--muted); font-size:14px}
+  footer{text-align:center; color:var(--muted); font-size:14px; margin-top:48px; padding-top:24px; border-top:1px solid var(--border)}
+  footer a{color:var(--accent); text-decoration:none}
+  .note{color:var(--muted); font-size:13px; text-align:center; margin-top:-18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Presenter Mode</h1>
+    <p class="tagline">双屏演讲者视图 · 零构建 · 零依赖</p>
+  </header>
+
+  <div class="lead">
+    你在台上旁征博引、金句频出、复杂概念一字不差——秘密在你的笔记本屏幕上：讲稿、计时器、当前页、下一页预览、幻灯片缩略图。观众看到的投影？<strong>干净的幻灯片，一个字的提词都没有。</strong>
+  </div>
+
+  <div class="cta">
+    <a class="btn btn-primary" href="presenter.html?slides=example/slides.html&notes=example/notes.md&lang=zh">▶ 打开 Demo</a>
+    <a class="btn btn-ghost" href="https://github.com/Mentran/presenter-mode">→ GitHub 仓库</a>
+  </div>
+  <p class="note">Demo 加载内置示例幻灯片。进入后点「打开观众窗口」体验双屏（请允许弹窗）。</p>
+
+  <div class="shots">
+    <figure class="shot">
+      <img src="docs/screenshot-presenter.png" alt="演讲者视图：讲稿、计时器、下一页预览">
+      <figcaption>演讲者视图 — 讲稿、计时器、下一页预览、缩略图列表</figcaption>
+    </figure>
+    <figure class="shot">
+      <img src="docs/screenshot-audience.png" alt="观众视图：干净的幻灯片">
+      <figcaption>观众视图 — 只有干净的幻灯片</figcaption>
+    </figure>
+  </div>
+
+  <div class="features">
+    <div class="feat"><h3>🎯 双屏分离</h3><p>讲稿留给你，观众只看幻灯片</p></div>
+    <div class="feat"><h3>⏱️ 计时器</h3><p>掌控节奏，不再超时</p></div>
+    <div class="feat"><h3>👀 下一页预览</h3><p>提前知道接下来讲什么</p></div>
+    <div class="feat"><h3>🔧 零构建</h3><p>一个 HTML 文件，浏览器打开就能用</p></div>
+  </div>
+
+  <footer>
+    <p>MIT License · <a href="https://github.com/Mentran/presenter-mode">github.com/Mentran/presenter-mode</a></p>
+  </footer>
+</div>
+</body>
+</html>
