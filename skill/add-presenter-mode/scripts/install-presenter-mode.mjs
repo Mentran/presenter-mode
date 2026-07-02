@@ -9,11 +9,11 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const skillRoot = path.resolve(__dirname, '..');
-const assetRoot = path.join(skillRoot, 'assets', 'presenter-mode');
+const assetRoot = path.join(skillRoot, 'assets');
 
 const args = parseArgs(process.argv.slice(2));
 const targetRoot = path.resolve(args.target || process.cwd());
-const installDir = path.join(targetRoot, 'presenter-mode');
+const presenterPath = path.join(targetRoot, 'presenter.html');
 const startPort = Number(args.port || 4311);
 const lang = args.lang || detectLanguage();
 
@@ -23,30 +23,30 @@ main().catch((err) => {
 });
 
 async function main() {
-  await assertDirectory(assetRoot, 'Missing bundled presenter-mode assets');
+  const presenterAsset = path.join(assetRoot, 'presenter.html');
+  await assertFile(presenterAsset, 'Missing bundled presenter.html asset');
   await assertDirectory(targetRoot, 'Target directory does not exist');
 
   const slidesRel = await resolveSlidesPath();
   const notesRel = await resolveNotesPath(slidesRel);
 
-  if (await exists(installDir)) {
+  if (await exists(presenterPath)) {
     if (!args.force) {
-      throw new Error('presenter-mode/ already exists. Re-run with --force to replace it.');
+      throw new Error('presenter.html already exists. Re-run with --force to replace it.');
     }
-    await rm(installDir, { recursive: true, force: true });
   }
 
-  await cp(assetRoot, installDir, { recursive: true });
+  await cp(presenterAsset, presenterPath);
 
-  const presenterRel = 'presenter-mode/presenter.html';
-  const slidesForPresenter = toUrlPath(path.relative(installDir, path.join(targetRoot, slidesRel)));
-  const notesForPresenter = toUrlPath(path.relative(installDir, path.join(targetRoot, notesRel)));
+  const presenterRel = 'presenter.html';
+  const slidesForPresenter = toUrlPath(slidesRel);
+  const notesForPresenter = toUrlPath(notesRel);
   const query = new URLSearchParams({ slides: slidesForPresenter, notes: notesForPresenter, lang });
 
   const port = args.noServer ? startPort : await findAvailablePort(startPort);
   const presenterUrl = `http://127.0.0.1:${port}/${presenterRel}?${query.toString()}`;
 
-  console.log('Installed presenter-mode/');
+  console.log('Installed presenter.html');
   console.log(`Slides: ${slidesRel}`);
   console.log(`Notes: ${notesRel}`);
   console.log(`Presenter URL: ${presenterUrl}`);
@@ -255,6 +255,13 @@ async function requireFile(input, message) {
 async function assertDirectory(dir, message) {
   const dirStat = await stat(dir).catch(() => null);
   if (!dirStat?.isDirectory()) {
+    throw new Error(message);
+  }
+}
+
+async function assertFile(file, message) {
+  const fileStat = await stat(file).catch(() => null);
+  if (!fileStat?.isFile()) {
     throw new Error(message);
   }
 }

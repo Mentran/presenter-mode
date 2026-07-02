@@ -53,12 +53,12 @@ async function main() {
     console.log('  Presenter sync may not work. Adaptation required.');
   }
 
-  // Check 5: Presenter-mode directory exists
+  // Check 5: presenter.html installed
   try {
-    await readFile('presenter-mode/presenter.html', 'utf8');
-    console.log('✓ presenter-mode/ directory installed');
+    await readFile('presenter.html', 'utf8');
+    console.log('✓ presenter.html installed');
   } catch {
-    throw new Error('presenter-mode/ directory not found. Run install script first.');
+    throw new Error('presenter.html not found in current directory. Run install script first.');
   }
 
   console.log('\n---');

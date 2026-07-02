@@ -73,7 +73,7 @@ node /path/to/skill/add-presenter-mode/scripts/install-presenter-mode.mjs \
 ```
 
 **The script:**
-- Copies `assets/presenter-mode/` into target project
+- Copies `presenter.html` to the target project root (same level as slides.html)
 - Generates `notes.md` if missing (empty template with slide titles)
 - Starts HTTP server on port 4311+
 - Prints presenter URL with pre-filled query params
@@ -127,7 +127,7 @@ node install-presenter-mode.mjs [options]
 --notes <path>   Notes path relative to target (default: auto-detect/generate)
 --lang <code>    UI language: en | zh (default: auto from $LANG)
 --port <number>  Start port search from here (default: 4311)
---force          Overwrite existing presenter-mode/ directory
+--force          Overwrite existing presenter.html
 --no-server      Copy files only, don't start HTTP server
 ```
 

@@ -74,6 +74,22 @@ open "http://127.0.0.1:4311/presenter.html?slides=example/slides.html&notes=exam
 
 `presenter.html` 默认会在同级目录找 `slides.html` 和 `notes.md`。所以实际使用时，把 `presenter.html` 放到你幻灯片旁边，或用下面的参数指定路径。
 
+### 用 Claude Code skill 自动安装
+
+如果你在用 [Claude Code](https://claude.ai/code)，可以直接说：
+
+```
+Add presenter mode to my slides
+```
+
+skill 会：
+- 自动探测你的幻灯片文件（`slides.html` 或 `index.html`）
+- 自动生成讲稿模板（如果 `notes.md` 不存在）
+- 把 `presenter.html` 复制到你的项目
+- 启动本地服务器，给你生成好的演讲者 URL
+
+详见 [`skill/add-presenter-mode/SKILL.md`](skill/add-presenter-mode/SKILL.md)。
+
 ### 自定义路径
 
 ```text
@@ -256,6 +272,22 @@ open "http://127.0.0.1:4311/presenter.html?slides=example/slides.html&notes=exam
 ```
 
 By default `presenter.html` looks for `slides.html` and `notes.md` next to it. In real use, drop `presenter.html` beside your deck, or point to paths with the params below.
+
+### Use Claude Code skill for automatic setup
+
+If you're using [Claude Code](https://claude.ai/code), just say:
+
+```
+Add presenter mode to my slides
+```
+
+The skill will:
+- Auto-detect your slide deck (`slides.html` or `index.html`)
+- Generate speaker notes template if `notes.md` doesn't exist
+- Copy `presenter.html` to your project
+- Start a local server and give you the presenter URL
+
+See [`skill/add-presenter-mode/SKILL.md`](skill/add-presenter-mode/SKILL.md) for details.
 
 ### Custom Paths
 

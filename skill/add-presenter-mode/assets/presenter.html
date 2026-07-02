@@ -946,14 +946,8 @@ function isAbsoluteOrExplicitRelative(value){
 }
 
 function presenterTargetBase(){
-  const url=new URL(window.location.href);
-  const marker='/presenter-mode/';
-  const index=url.pathname.lastIndexOf(marker);
-  if(index===-1)return window.location.href;
-  url.pathname=url.pathname.slice(0,index+1);
-  url.search='';
-  url.hash='';
-  return url.href;
+  // presenter.html is at the same level as slides/notes, so relative paths resolve from here
+  return window.location.href;
 }
 
 function normalizeUrl(value){

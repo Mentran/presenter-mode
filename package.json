@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "node scripts/smoke-test.mjs",
-    "sync": "cp presenter.html skill/add-presenter-mode/assets/presenter-mode/presenter.html && echo synced presenter.html to skill assets"
+    "sync": "cp presenter.html skill/add-presenter-mode/assets/presenter.html && echo synced presenter.html to skill assets"
   },
   "keywords": [
     "presentation",
