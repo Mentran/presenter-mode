@@ -18,14 +18,14 @@
     "演讲者视图",
     "投屏演讲"
   ],
-  "author": "Your Name <your.email@example.com>",
+  "author": "Mentran",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/presenter-mode.git"
+    "url": "https://github.com/Mentran/presenter-mode.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/presenter-mode/issues"
+    "url": "https://github.com/Mentran/presenter-mode/issues"
   },
-  "homepage": "https://github.com/yourusername/presenter-mode#readme"
+  "homepage": "https://github.com/Mentran/presenter-mode#readme"
 }
