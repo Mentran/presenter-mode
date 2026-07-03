@@ -39,10 +39,16 @@
   .shot{border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--card)}
   .shot img{width:100%; display:block}
   .shot figcaption{padding:10px 16px; color:var(--muted); font-size:14px}
-  .features{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px; margin:36px 0}
+  .features{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px; margin:36px 0}
   .feat{background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px 20px}
   .feat h3{margin:0 0 6px; font-size:16px}
   .feat p{margin:0; color:var(--muted); font-size:14px}
+  @media (max-width: 760px){
+    .features{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width: 520px){
+    .features{grid-template-columns:1fr}
+  }
   footer{text-align:center; color:var(--muted); font-size:14px; margin-top:48px; padding-top:24px; border-top:1px solid var(--border)}
   footer a{color:var(--accent); text-decoration:none}
   .note{color:var(--muted); font-size:13px; text-align:center; margin-top:-18px}
@@ -56,31 +62,33 @@
   </header>
 
   <div class="lead">
-    你在台上旁征博引、金句频出、复杂概念一字不差——秘密在你的笔记本屏幕上：讲稿、计时器、当前页、下一页预览、幻灯片缩略图。观众看到的投影？<strong>干净的幻灯片，一个字的提词都没有。</strong>
+    你在台上口若悬河、妙语连珠，复杂术语信手拈来——秘密全在笔记本屏幕里：讲稿、计时器、当前页、下一页预览、缩略图，尽收眼底。<br>
+    而观众眼前的投影，<strong>依然是那页干净纯粹的幻灯片。</strong>
   </div>
 
   <div class="cta">
-    <a class="btn btn-primary" href="presenter.html?slides=example/slides.html&notes=example/notes.md&lang=zh">▶ 打开 Demo</a>
-    <a class="btn btn-ghost" href="https://github.com/Mentran/presenter-mode">→ GitHub 仓库</a>
+    <a class="btn btn-primary" href="presenter.html?slides=example/slides.html&notes=example/notes.md&lang=zh">🎯 立即体验 Demo</a>
+    <a class="btn btn-ghost" href="https://github.com/Mentran/presenter-mode">⭐ GitHub 源码</a>
   </div>
-  <p class="note">Demo 加载内置示例幻灯片。进入后点「打开观众窗口」体验双屏（请允许弹窗）。</p>
+  <p class="note">💡 示例已内置幻灯片，进入后点击「打开展示窗口」，允许浏览器弹窗即可体验双屏效果。</p>
 
   <div class="shots">
     <figure class="shot">
-      <img src="docs/screenshot-presenter.png" alt="演讲者视图：讲稿、计时器、下一页预览">
-      <figcaption>演讲者视图 — 讲稿、计时器、下一页预览、缩略图列表</figcaption>
-    </figure>
-    <figure class="shot">
-      <img src="docs/screenshot-audience.png" alt="观众视图：干净的幻灯片">
       <figcaption>观众视图 — 只有干净的幻灯片</figcaption>
+      <img src="docs/screenshot-audience.png" alt="观众视图：干净的幻灯片">
+    </figure>
+
+    <figure class="shot">
+      <figcaption>演讲者视图 — 讲稿、预览、计时、缩略图，一览无遗</figcaption>
+      <img src="docs/screenshot-presenter.png" alt="演讲者视图 — 讲稿、预览、计时、缩略图">
     </figure>
   </div>
 
   <div class="features">
-    <div class="feat"><h3>🎯 双屏分离</h3><p>讲稿留给你，观众只看幻灯片</p></div>
-    <div class="feat"><h3>⏱️ 计时器</h3><p>掌控节奏，不再超时</p></div>
-    <div class="feat"><h3>👀 下一页预览</h3><p>提前知道接下来讲什么</p></div>
-    <div class="feat"><h3>🔧 零构建</h3><p>一个 HTML 文件，浏览器打开就能用</p></div>
+    <div class="feat"><h3>🎯 双屏分离</h3><p>你看到讲稿和预览，观众只看到幻灯片</p></div>
+    <div class="feat"><h3>⏱️ 计时器</h3><p>随时掌握进度，避免超时或过快</p></div>
+    <div class="feat"><h3>👀 下一页预览</h3><p>提前知道下一页内容，切换更自然</p></div>
+    <div class="feat"><h3>🔧 即开即用</h3><p>单文件部署，打开即可使用</p></div>
   </div>
 
   <footer>
